@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from "react-native";
 
 const FoodListItem = ({item}) => {
     return (
-        <View style={styles.subContainer}>
+        <View style={styles.container}>
             <View style={{flex: 1, gap: 5}}>
                 <Text style={{fontWeight: 'bold', fontSize: 16}}>{item.label}</Text>
                 <Text style={{color: 'dimgray'}}>{item.cal} cal, {item.brand}</Text>
@@ -13,10 +13,8 @@ const FoodListItem = ({item}) => {
     )
 }
 
-export default FoodListItem;
-
 const styles = StyleSheet.create({
-    subContainer: {
+    container: {
         backgroundColor: 'gainsboro',
         padding: 10,
         borderRadius: 10,
@@ -25,3 +23,5 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 });
+
+export default FoodListItem;
