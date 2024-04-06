@@ -1,47 +1,36 @@
-import { View, Text, FlatList, StyleSheet, Button } from "react-native";
+import { View, Text, FlatList, StyleSheet, Button, ActivityIndicator } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
-import FoodListItem from "../components/FoodListItem";
+import FoodLogListItem from "../components/FoodLogListItem";
+import { gql, useQuery } from "@apollo/client";
+import dayjs from "dayjs";
 
-const foodItems = [
-  {
-    food: {
-      label: "Apple",
-      nutrients: { ENERC_KCAL: 122 },
-      brand: "Apple Brands",
-    },
-  },
-  {
-    food: {
-      label: "Banana",
-      nutrients: { ENERC_KCAL: 3424 },
-      brand: "Banana Brands",
-    },
-  },
-  {
-    food: {
-      label: "Orange",
-      nutrients: { ENERC_KCAL: 433 },
-      brand: "Orange Brands",
-    },
-  },
-  {
-    food: {
-      label: "Pineapple",
-      nutrients: { ENERC_KCAL: 34 },
-      brand: "Pineapple Brands",
-    },
-  },
-  {
-    food: {
-      label: "Grapes",
-      nutrients: { ENERC_KCAL: 4665 },
-      brand: "Grapes Brands",
-    },
-  },
-];
+const query = gql`
+  query foodLogsForUserIdAndDate($date: Date!, $user_id: String!) {
+    foodLogsForUserIdAndDate(date: $date, user_id: $user_id) {
+      food_id
+      user_id
+      created_at
+      kcal
+      label
+      id
+    }
+  }
+`;
 
 export default function HomeScreen() {
+    const user_id = 'reborn';
+    const {data, loading, error} = useQuery(query, {
+      variables: {
+        date: dayjs().format("YYYY-MM-DD"),
+        user_id,
+      },
+    });
+
+    if(loading) return <ActivityIndicator size="large" color="#0000ff" />;
+
+    if(error) return <Text style={styles.text}>Failed to fetch data :(</Text>;
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -55,8 +44,8 @@ export default function HomeScreen() {
         </Link>
       </View>
       <FlatList
-        data={foodItems}
-        renderItem={({ item }) => <FoodListItem item={item} />}
+        data={data.foodLogsForUserIdAndDate}
+        renderItem={({ item }) => <FoodLogListItem item={item} />}
         contentContainerStyle={{ gap: 5 }}
       />
     </View>
@@ -81,4 +70,10 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "dimgray",
   },
+  text: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+
+  }
 });

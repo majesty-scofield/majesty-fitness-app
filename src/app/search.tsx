@@ -2,6 +2,7 @@ import {StyleSheet, View, FlatList, TextInput, Button, ActivityIndicator, Text} 
 import FoodListItem from "../components/FoodListItem";
 import {useState} from "react";
 import {gql, useLazyQuery} from "@apollo/client";
+import React from 'react';
 
 const query = gql`
     query search($ingr: String) {

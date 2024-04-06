@@ -1,5 +1,6 @@
 import {Stack} from "expo-router";
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import React from "react";
 
 const client = new ApolloClient({
     uri: 'https://yantongshan.stepzen.net/api/newbie-moth/__graphql',
