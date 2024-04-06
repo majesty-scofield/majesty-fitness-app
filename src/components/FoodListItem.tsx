@@ -3,14 +3,19 @@ import {View, Text, StyleSheet} from "react-native";
 
 const FoodListItem = ({item}) => {
     return (
-        <View style={styles.container}>
-            <View style={{flex: 1, gap: 5}}>
-                <Text style={{fontWeight: 'bold', fontSize: 16}}>{item.label}</Text>
-                <Text style={{color: 'dimgray'}}>{item.cal} cal, {item.brand}</Text>
-            </View>
-            <AntDesign name="pluscircleo" size={24} color="royalblue"/>
+      <View style={styles.container}>
+        <View style={{ flex: 1, gap: 5 }}>
+          <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+            {item.food.label}
+          </Text>
+          <Text style={{ color: "dimgray" }}>
+            {item.food.nutrients.ENERC_KCAL} cal{item.food.brand && ','}{" "}
+            {item.food.brand}
+          </Text>
         </View>
-    )
+        <AntDesign name="pluscircleo" size={24} color="royalblue" />
+      </View>
+    );
 }
 
 const styles = StyleSheet.create({
