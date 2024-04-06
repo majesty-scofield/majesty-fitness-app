@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import FoodLogListItem from "../components/FoodLogListItem";
 import { gql, useQuery } from "@apollo/client";
 import dayjs from "dayjs";
+import Error from "../components/Error";
 
 const query = gql`
   query foodLogsForUserIdAndDate($date: Date!, $user_id: String!) {
@@ -18,6 +19,14 @@ const query = gql`
   }
 `;
 
+const q = gql`
+  query KcalTotalForDate($user_id: String!, $date: Date!) {
+    KcalTotalForDate(date: $date, user_id: $user_id) {
+      total_kcal
+    }
+  }
+`;
+
 export default function HomeScreen() {
     const user_id = 'reborn';
     const {data, loading, error} = useQuery(query, {
@@ -27,15 +36,26 @@ export default function HomeScreen() {
       },
     });
 
-    if(loading) return <ActivityIndicator size="large" color="#0000ff" />;
+    
+  const { data: response } = useQuery(q, {
+    variables: {
+      user_id,
+      date: dayjs().format("YYYY-MM-DD")
+    },
+  })
+  
 
-    if(error) return <Text style={styles.text}>Failed to fetch data :(</Text>;
+    if(loading) return <ActivityIndicator style={{padding: 10}} size="large" color="#0000ff" />;
+
+    if(error) return <Error />;
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.title}>Calories Remaining</Text>
-        <Text style={styles.title}>1779 - 532 = 650</Text>
+        <Text style={styles.title}>
+          {response.KcalTotalForDate.total_kcal} - 532 = 650
+        </Text>
       </View>
       <View style={styles.row}>
         <Text style={styles.title}>Today's food</Text>
